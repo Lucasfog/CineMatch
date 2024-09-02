@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 30,
               ),
               Text(
-                'Melhores Avaliados',
+                'Filmes Bem Avaliados',
                 style: GoogleFonts.aBeeZee(fontSize: 25),
               ),
               const SizedBox(
