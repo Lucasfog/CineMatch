@@ -1,5 +1,5 @@
 class Constants {
-  static const apiKey = const String.fromEnvironment('API_KEY');
+  static const apiKey = String.fromEnvironment('API_KEY');
   static const imagePath = 'https://image.tmdb.org/t/p/w500';
 
   String formatDate(String text) {
