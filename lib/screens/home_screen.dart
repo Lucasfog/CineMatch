@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Trending Movies',
+                'Filmes em Alta',
                 style: GoogleFonts.aBeeZee(
                   fontSize: 25,
                 ),
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 30,
               ),
               Text(
-                'Top Rated Movies',
+                'Melhores Avaliados',
                 style: GoogleFonts.aBeeZee(fontSize: 25),
               ),
               const SizedBox(
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 30,
               ),
               Text(
-                'Upcoming Movies',
+                'Em breve',
                 style: GoogleFonts.aBeeZee(fontSize: 25),
               ),
               const SizedBox(
