@@ -1,6 +1,6 @@
 class Constants {
   static const apiKey = String.fromEnvironment('API_KEY');
-  static const imagePath = 'https://image.tmdb.org/t/p/w500';
+  static const imagePath = 'https://image.tmdb.org/t/p/original';
 
   String formatDate(String text) {
     List<String> parts = text.split('-');
