@@ -1,5 +1,6 @@
 import 'package:cine_match/colors.dart';
 import 'package:cine_match/screens/login_screen.dart';
+import 'package:cine_match/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
