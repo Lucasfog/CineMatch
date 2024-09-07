@@ -1,5 +1,6 @@
 import 'package:cine_match/colors.dart';
-import 'package:cine_match/screens/home_screen.dart';
+import 'package:cine_match/screens/login_screen.dart';
+import 'package:cine_match/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colours.scaffoldBgColor,
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
