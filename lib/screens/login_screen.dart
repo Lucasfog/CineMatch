@@ -1,4 +1,5 @@
 import 'package:cine_match/models/input_controller_model.dart';
+import 'package:cine_match/screens/home_screen.dart';
 import 'package:cine_match/screens/register_screen.dart';
 import 'package:cine_match/widgets/input_text_field.dart';
 import 'package:flutter/material.dart';
@@ -69,14 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
-                    if (emailController.textController.text == 'kayky') {
-                      setState(() {
-                        _validacaoLogin =
-                            'O usuario Pompers ja esta utilizando esta senha';
-                      });
-                    }
-                  },
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue, // Cor de fundo
                     foregroundColor: Colors.white, // Cor do texto e ícone
@@ -98,7 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      _validacaoLogin = 'Problema é seu';
+                      _validacaoLogin =
+                          'Este modulo ainda esta em desenvolvimento';
                     });
                   },
                   child: const Text(
