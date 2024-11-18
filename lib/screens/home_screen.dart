@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:cine_match/api/api.dart';
 import 'package:cine_match/models/movie_model.dart';
 import 'package:cine_match/widgets/movies_slider.dart';
 import 'package:cine_match/widgets/trending_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,30 +18,39 @@ class HomeScreen extends StatefulWidget {
 late Future<List<MovieModel>> trendingMovies;
 late Future<List<MovieModel>> topRatedMovies;
 late Future<List<MovieModel>> upcomingMovies;
+late Future<List<MovieModel>> favoriteMovies;
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _loadUserData();
     trendingMovies = Api().getTrendingMovies();
     topRatedMovies = Api().getTopRatedMovies();
     upcomingMovies = Api().getUpcomingMovies();
+    favoriteMovies = Api().getFavoriteMovies(userId);
+  }
+
+  var userId = 0;
+
+  // Carrega os dados do usuário do SharedPreferences
+  void _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('usuarioLogado');
+
+    if (userData != null) {
+      final userMap = json.decode(userData);
+      setState(() {
+        userId = userMap['id'] ?? 0;
+      });
+    }
+
+    favoriteMovies = Api().getFavoriteMovies(userId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Image.asset(
-          'assets/cinematch.png',
-          fit: BoxFit.cover,
-          height: 50,
-          filterQuality: FilterQuality.high,
-        ),
-        centerTitle: true,
-      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -116,6 +128,36 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 child: FutureBuilder(
                   future: upcomingMovies,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else if (snapshot.hasData) {
+                      return MoviesSlider(
+                        snapshot: snapshot,
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Text(
+                'Favoritos',
+                style: GoogleFonts.aBeeZee(fontSize: 25),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                child: FutureBuilder(
+                  future: favoriteMovies,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Center(

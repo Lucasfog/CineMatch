@@ -1,7 +1,9 @@
+import 'package:cine_match/api/api.dart'; // Importa o serviço de API
 import 'package:cine_match/models/input_controller_model.dart';
 import 'package:cine_match/screens/login_screen.dart';
 import 'package:cine_match/widgets/input_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,6 +13,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  Api apiService = Api(); // Instância do serviço de API
+
   InputControllerModel nameController = InputControllerModel();
   InputControllerModel lastNameController = InputControllerModel();
   InputControllerModel emailController = InputControllerModel();
@@ -21,60 +25,102 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
+    // Configuração dos listeners para foco (ajusta a cor do label)
     nameController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         nameController.labelColor = nameController.focusNode.hasFocus
             ? nameController.labelColorFocus
             : nameController.labelColorNoFocus;
       });
     });
-
     lastNameController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         lastNameController.labelColor = lastNameController.focusNode.hasFocus
             ? lastNameController.labelColorFocus
             : lastNameController.labelColorNoFocus;
       });
     });
-
     emailController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         emailController.labelColor = emailController.focusNode.hasFocus
             ? emailController.labelColorFocus
             : emailController.labelColorNoFocus;
       });
     });
-
     calendarController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         calendarController.labelColor = calendarController.focusNode.hasFocus
             ? calendarController.labelColorFocus
             : calendarController.labelColorNoFocus;
       });
     });
-
     passwordController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         passwordController.labelColor = passwordController.focusNode.hasFocus
             ? passwordController.labelColorFocus
             : passwordController.labelColorNoFocus;
       });
     });
-
     confirmPasswordController.focusNode.addListener(() {
       setState(() {
-        // Muda a cor do rótulo quando o campo está em foco
         confirmPasswordController.labelColor =
             confirmPasswordController.focusNode.hasFocus
                 ? confirmPasswordController.labelColorFocus
                 : confirmPasswordController.labelColorNoFocus;
       });
     });
+  }
+
+  // Função de cadastro que faz a chamada à API e valida as senhas
+  Future<void> register() async {
+    if (passwordController.textController.text !=
+        confirmPasswordController.textController.text) {
+      // Exibe uma mensagem de erro se as senhas não forem iguais
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("As senhas não coincidem!")),
+      );
+      return;
+    }
+
+    final birthDateRaw = calendarController.textController.text;
+    final birthDate = DateFormat('dd/MM/yyyy').parse(
+        birthDateRaw); // Supondo que o usuário insira no formato dd/MM/yyyy
+    final birthDateFormatted = DateFormat('yyyy-MM-dd').format(birthDate);
+
+    // Coletando os dados dos campos de entrada
+    final name = nameController.textController.text;
+    final lastName = lastNameController.textController.text;
+    final email = emailController.textController.text;
+    final password = passwordController.textController.text;
+
+    try {
+      // Chama a API para registrar o usuário
+      final response = await apiService.registerUser({
+        "nome": name,
+        "sobrenome": lastName,
+        "email": email,
+        "data_nascimento": birthDateFormatted,
+        "senha": password,
+      });
+
+      if (response.statusCode == 201) {
+        // Sucesso no cadastro, redireciona para a tela de login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } else {
+        // Exibe uma mensagem de erro se o cadastro falhar
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Erro ao cadastrar usuário")),
+        );
+      }
+    } catch (e) {
+      // Exibe uma mensagem de erro em caso de exceção
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro: $e")),
+      );
+    }
   }
 
   @override
@@ -95,27 +141,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   focusNode: nameController.focusNode,
                   labelColor: nameController.labelColor,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 InputTextField(
                   text: 'Sobrenome',
                   textController: lastNameController.textController,
                   focusNode: lastNameController.focusNode,
                   labelColor: lastNameController.labelColor,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 InputTextField(
                   text: 'Email',
                   textController: emailController.textController,
                   focusNode: emailController.focusNode,
                   labelColor: emailController.labelColor,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 InputTextField(
                   text: 'Data de nascimento',
                   textController: calendarController.textController,
@@ -123,9 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   labelColor: calendarController.labelColor,
                   isCalendar: true,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 InputTextField(
                   text: 'Senha',
                   textController: passwordController.textController,
@@ -133,9 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   labelColor: passwordController.labelColor,
                   isPassword: true,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 InputTextField(
                   text: 'Confirmar senha',
                   textController: confirmPasswordController.textController,
@@ -143,23 +179,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   labelColor: confirmPasswordController.labelColor,
                   isPassword: true,
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: register, // Chama a função de cadastro
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Cor de fundo
-                    foregroundColor: Colors.white, // Cor do texto e ícone
-                    shadowColor: Colors.black, // Cor da sombra
-                    elevation: 5, // Elevação do botão
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shadowColor: Colors.black,
+                    elevation: 5,
                     shape: RoundedRectangleBorder(
-                      // Forma do botão
-                      borderRadius:
-                          BorderRadius.circular(15), // Borda arredondada
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 150, vertical: 20), // Espaçamento interno
+                      horizontal: 150,
+                      vertical: 20,
+                    ),
                   ),
                   child: const Text('Cadastrar'),
                 ),
