@@ -25,7 +25,10 @@ class MyTabBar extends StatelessWidget {
         body: TabBarView(
           children: [
             const HomeScreen(),
-            FetchScreen(onMovieAdded: (Map<String, dynamic> movie) {}),
+            FetchScreen(
+              onMovieAdded: (Map<String, dynamic> movie) {},
+              onReloadFavorite: () {},
+            ),
             AccountScreen(),
           ],
         ),

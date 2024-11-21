@@ -156,15 +156,26 @@ class Api {
     }
   }
 
+// Função para validar codigo
+  Future<http.Response> validarCodigo(String email, String resetCode) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:3000/validar-codigo'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'resetCode': resetCode,
+      }),
+    );
+    return response;
+  }
+
 // Função para redefinir a senha
-  Future<http.Response> redefinirSenha(
-      String email, String resetCode, String novaSenha) async {
+  Future<http.Response> redefinirSenha(String email, String novaSenha) async {
     final response = await http.post(
       Uri.parse('http://localhost:3000/redefinir-senha'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
-        'resetCode': resetCode, // Inclua o código de recuperação
         'newPassword': novaSenha, // E passe a nova senha com o nome correto
       }),
     );

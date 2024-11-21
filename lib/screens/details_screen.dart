@@ -11,7 +11,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({super.key, required this.movie});
+  final VoidCallback onReloadFavorite;
+
+  const DetailsScreen({
+    super.key,
+    required this.movie,
+    required this.onReloadFavorite,
+  });
   final MovieModel movie;
 
   @override
@@ -70,9 +76,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
       if (_isFavorite) {
         // Se for favorito, remove dos favoritos
         await _apiService.removeMovieFromFavorites(userId, widget.movie.id);
+        widget.onReloadFavorite();
       } else {
         // Se não for favorito, adiciona aos favoritos
         await _apiService.addMovieToFavorites(userId, widget.movie.id);
+        widget.onReloadFavorite();
       }
 
       setState(() {
@@ -154,6 +162,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed:
             _toggleFavorite, // Chama a função para adicionar/remover dos favoritos
+
         backgroundColor: _isFavorite ? Colors.red : Colors.grey,
         child: Icon(
           _isFavorite ? Icons.favorite : Icons.favorite_border,

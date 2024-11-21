@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cine_match/api/api.dart';
 import 'package:cine_match/models/input_controller_model.dart';
 import 'package:cine_match/screens/login_screen.dart';
@@ -46,12 +48,12 @@ class _RecoveryScreenState extends State<RecoveryScreen> {
         SnackBar(content: Text("Código enviado: ${response.body}")),
       );
 
-      // Redireciona para a tela de validação de código, passando o email como parâmetro
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ValidationCodeScreen(email: email),
-        ),
+            builder: (context) => ValidationCodeScreen(
+                  email: email,
+                )),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

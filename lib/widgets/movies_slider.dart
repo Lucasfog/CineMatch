@@ -3,9 +3,12 @@ import 'package:cine_match/screens/details_screen.dart';
 import 'package:flutter/material.dart';
 
 class MoviesSlider extends StatelessWidget {
+  final VoidCallback onReloadFavorite;
+
   const MoviesSlider({
     super.key,
     required this.snapshot,
+    required this.onReloadFavorite,
   });
 
   final AsyncSnapshot snapshot;
@@ -28,6 +31,7 @@ class MoviesSlider extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailsScreen(
+                      onReloadFavorite: onReloadFavorite,
                       movie: snapshot.data[index],
                     ),
                   ),

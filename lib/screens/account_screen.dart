@@ -1,4 +1,5 @@
 import 'package:cine_match/screens/login_screen.dart';
+import 'package:cine_match/screens/new_password.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -96,9 +97,12 @@ class _AccountScreenState extends State<AccountScreen> {
               leading: const Icon(Icons.lock),
               title: const Text('Alterar Senha'),
               onTap: () {
-                // Aqui você pode implementar a lógica para alterar a senha
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Alterar Senha clicado!')),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NewPasswordScreen(
+                            email: userEmail,
+                          )),
                 );
               },
             ),

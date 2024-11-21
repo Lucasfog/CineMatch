@@ -31,6 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
     favoriteMovies = Api().getFavoriteMovies(userId);
   }
 
+  void reloadFavorite() {
+    setState(() {
+      favoriteMovies = Api().getFavoriteMovies(userId);
+    });
+  }
+
   var userId = 0;
 
   // Carrega os dados do usuário do SharedPreferences
@@ -75,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     } else if (snapshot.hasData) {
                       return TrendingSlider(
+                        onReloadFavorite: reloadFavorite,
                         snapshot: snapshot,
                       );
                     } else {
@@ -105,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     } else if (snapshot.hasData) {
                       return MoviesSlider(
+                        onReloadFavorite: reloadFavorite,
                         snapshot: snapshot,
                       );
                     } else {
@@ -135,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     } else if (snapshot.hasData) {
                       return MoviesSlider(
+                        onReloadFavorite: reloadFavorite,
                         snapshot: snapshot,
                       );
                     } else {
@@ -159,17 +168,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: FutureBuilder(
                   future: favoriteMovies,
                   builder: (context, snapshot) {
-                    if (snapshot.hasError) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
                       return Center(
                         child: Text(snapshot.error.toString()),
                       );
                     } else if (snapshot.hasData) {
-                      return MoviesSlider(
-                        snapshot: snapshot,
-                      );
+                      // Verifica se a lista de favoritos está vazia
+                      final List<MovieModel> movies = snapshot.data!;
+                      if (movies.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'Sem favoritos',
+                            style: GoogleFonts.aBeeZee(
+                                fontSize: 20, color: Colors.grey),
+                          ),
+                        );
+                      } else {
+                        return MoviesSlider(
+                          onReloadFavorite: reloadFavorite,
+                          snapshot: snapshot,
+                        );
+                      }
                     } else {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: Text('Erro inesperado ao carregar favoritos'),
                       );
                     }
                   },

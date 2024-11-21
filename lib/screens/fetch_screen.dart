@@ -6,10 +6,12 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class FetchScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onMovieAdded;
+  final VoidCallback onReloadFavorite;
 
   const FetchScreen({
     super.key,
     required this.onMovieAdded,
+    required this.onReloadFavorite,
   });
 
   @override
@@ -103,7 +105,10 @@ class _FetchScreenState extends State<FetchScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DetailsScreen(movie: movie),
+                    builder: (context) => DetailsScreen(
+                      movie: movie,
+                      onReloadFavorite: () {},
+                    ),
                   ),
                 );
               },
