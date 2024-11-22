@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Recovery</title>
+    <style>
+        /* Reset básico */
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .email-header {
+            background: #2196f3;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .email-header h1 {
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+        }
+        .email-body p {
+            margin-bottom: 15px;
+        }
+        .email-body .recovery-code {
+            display: inline-block;
+            background: #2196f3;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .email-footer {
+            background: #f4f4f4;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>Recuperação de senha</h1>
+        </div>
+        <div class="email-body">
+            <p>Olá {{username}},</p>
+            <p>Recebemos uma solicitação para redefinir sua senha. Use o código abaixo para recuperar sua conta:</p>
+            <div class="recovery-code">{{resetCode}}</div>
+            <p>Se você não solicitou uma redefinição de senha, ignore este e-mail ou entre em contato com o suporte se tiver dúvidas.</p>
+        </div>
+        <div class="email-footer">
+            <p>Obrigado,<br>A equipe do CineMatch</p>
+        </div>
+    </div>
+</body>
+</html>
